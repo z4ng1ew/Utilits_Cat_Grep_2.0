@@ -1,0 +1,38 @@
+./s21_cat -s -s -s -s -s -s TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -s -s -s -s -s TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s -s -s -s -s -e TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -s -s -s -s -e TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s -e TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -e TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s -s -s -s -s -n TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -s -s -s -s -n TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s -n TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -n TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s -s -s -s -s -v TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -s -s -s -s -v TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s -v TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -v TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s -s -s -s -s -b TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -s -s -s -s -b TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s -b TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -b TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s -s -s -s -s -t TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -s -s -s -s -t TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s -t TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -t TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s -s -s -s -e -e TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -s -s -s -e -e TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s -e TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -e TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s -s -s -s -e -n TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -s -s -s -e -n TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s -e -n TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -e -n TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s -s -s -s -e -v TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -s -s -s -e -v TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s -v -e TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -v -e TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
+./s21_cat -s -s -s -s -e -b TEST-SUITE/TEST-FILE_002 > TEST-FILE-0.testing
+cat -s -s -s -s -e -b TEST-SUITE/TEST-FILE_002 > TEST-FILE-1.testing
