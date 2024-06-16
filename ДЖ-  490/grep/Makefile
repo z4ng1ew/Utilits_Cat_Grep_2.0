@@ -1,17 +1,16 @@
-Some_File = grep
-Opt = -Wall -Werror -Wextra -std=c11 -D_POSIX_C_SOURCE=200809L
+COMPILE=gcc
+COPT=-Wall -Wextra -Werror -std=c11 -g
 
-all: s21_$(Some_File)
+all: rebuild
 
-s21_$(Some_File): clean
-	gcc $(Opt) s21_$(Some_File).c -o s21_$(Some_File) -g -std=c11
+s21_grep:
+	$(COMPILE) $(COPT) s21_grep.c -o s21_grep
+
+test:
+	./run_tests.sh
+	
+	
+rebuild: clean s21_grep 
 
 clean:
-	rm -rf *.out s21_$(Some_File)
-
-style:
-	clang-format -style=google -n *.c *.h
-
-format:
-	clang-format -style=google -i *.c *.h
-
+	rm -rf s21_grep 

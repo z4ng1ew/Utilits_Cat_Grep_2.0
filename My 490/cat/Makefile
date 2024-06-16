@@ -1,16 +1,19 @@
-Project_Name = cat
-Flags = -Wall -Werror -Wextra -std=c11 -D_POSIX_C_SOURCE=200809L
+COMPILE=gcc
+COPT=-Wall -Wextra -Werror -std=c11 -g
+DIR=My_Auto-tests
 
-all: s21_$(Project_Name)
+all: rebuild
 
-s21_$(Project_Name): clean
-	gcc $(Flags) s21_$(Project_Name).c -o s21_$(Project_Name) -g -std=c11
+s21_grep:
+	$(COMPILE) $(COPT) s21_grep.c -o s21_grep
+
+test:
+	$(COMPILE) $(COPT) $(DIR)/s21_grep_test.c $(DIR)/test_utils.c -o s21_grep_test
+
+run:
+	./s21_grep_test 2 v
+
+rebuild: clean s21_grep test
 
 clean:
-	rm -rf *.out s21_$(Project_Name)
-
-style:
-	clang-format -style=google -n *.c *.h
-
-format:
-	clang-format -style=google -i *.c *.h
+	rm -rf s21_grep test

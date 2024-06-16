@@ -1,10 +1,10 @@
 #!/bin/bash
 
-falshivka="./s21_cat"
-original="cat"
+MyUtilit="./s21_cat"
+LinuxUtilit="cat"
 
-file_name='TEST-FILE'
-file_format=".testing"
+file='TEST-FILE'
+file_extense=".testing"
 
 suite=('Cases/Input_case_2')
 
@@ -13,7 +13,6 @@ flags=(
     '--number-nonblank' '--number' '--squeeze-blank'
 )
 
-# Генерация всех комбинаций длиной 6 с повторениями
 generate_combinations() {
     local n=${#flags[@]}
     for ((i = 0; i < n; i++)); do
@@ -53,7 +52,6 @@ file_comparison() {
     fi
 }
 
-# Ограничиваемся первыми 462 комбинациями
 for test in "${!all_var[@]}"; do
     if ((test >= 462)); then
         break
@@ -63,24 +61,24 @@ for test in "${!all_var[@]}"; do
     shuffled_suite=("${suite[@]}")
     shuffled_suite=( $(shuf -e "${shuffled_suite[@]}") )
 
-    # Добавляем проверку на несуществующую опцию -z
+
     if [[ $cur_flags == *" -z"* ]]; then
         echo "Skipping invalid combination: $cur_flags"
         continue
     fi
 
-    echo "Current TEST [$((test + 1)) / 462] - "
+    echo "Current TEST [$((test + 1)) ----- 462] - "
     for i in 0 1; do
         if [[ $i -eq 0 ]]; then
-            func="$falshivka"
+            func="$MyUtilit"
         else
-            func="$original"
+            func="$LinuxUtilit"
         fi
-        m_str="$func $cur_flags ${shuffled_suite[*]} > ${file_name}-${i}${file_format}"
+        m_str="$func $cur_flags ${shuffled_suite[*]} > ${file}-${i}${file_extense}"
         echo "$m_str" >> commands.testing
         eval "$m_str"
     done
-    file_comparison "${file_name}-0${file_format}" "${file_name}-1${file_format}"
+    file_comparison "${file}-0${file_extense}" "${file}-1${file_extense}"
 done
 
 total_tests=$((success_count + failure_count))
@@ -88,5 +86,5 @@ echo -e "\nTotal tests: $total_tests"
 echo "Successful tests: $success_count"
 echo "Failed tests: $failure_count"
 
-rm -rf *"${file_format}"
+rm -rf *"${file_extense}"
 

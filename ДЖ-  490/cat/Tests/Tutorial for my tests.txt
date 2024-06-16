@@ -4,16 +4,20 @@
 
 1. **Опция `-b` (`--number-nonblank`)**
    - **Название файла:** `test_number_nonblank.txt`
-   - **Команда:** `./s21_cat -b Tests/test_number_nonblank.txt`
-   - **Команда (длинная опция):** `./s21_cat --number-nonblank Tests/test_number_nonblank.txt`
+   
+   - **Команда:** ./s21_cat -b Tests/test_squeeze_blank.txt
+
+   - **Команда (длинная опция):** `./s21_cat --number-nonblank Tests/test_squeeze_blank.txt
 
 
     Ожидаемый результат:
 
-     1
-     2  This is line 2.
-     3
-     4  This is line 4.
+     1	Line 1
+
+
+
+     2	Line 4
+
 
 2. **Опция `-e` (подразумевает `-v`, отображает конец строки как `$`)**
    - **Название файла:** `test_display_ends.txt`

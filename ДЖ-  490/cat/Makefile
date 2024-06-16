@@ -1,16 +1,17 @@
-File_call = cat
-Options = -Wall -Werror -Wextra -std=c11 -D_POSIX_C_SOURCE=200809L
+COMPILE=gcc
+COPT=-Wall -Wextra -Werror -std=c11 -g
 
-all: s21_$(File_call)
 
-s21_$(File_call): clean
-	gcc $(Options) s21_$(File_call).c -o s21_$(File_call) -g -std=c11
+all: rebuild
+
+s21_cat:
+	$(COMPILE) $(COPT) s21_cat.c -o s21_cat
+
+
+test:
+	./сat_check.sh
+
+rebuild: clean s21_cat
 
 clean:
-	rm -rf *.out s21_$(File_call)
-
-style:
-	clang-format -style=google -n *.c *.h
-
-format:
-	clang-format -style=google -i *.c *.h
+	rm -rf s21_cat
