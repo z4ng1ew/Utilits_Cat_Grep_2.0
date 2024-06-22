@@ -1,0 +1,206 @@
+Это тестовый файл для утилиты cat.
+Он содержит несколько строк текста.
+Этот файл будет использоваться для проверки основной функциональности.
+
+
+
+
+
+Вот команды с флагами для каждого из файлов:
+
+1. Для файла `empty_lines_b_s.txt`:
+   
+   ./s21_cat -b tests/empty_lines_b_s.txt
+   
+   number-nonblank
+   Ожидаемый результат:
+   
+   1   .Строка 1
+   2   .Строка 2
+
+
+   3   .Строка 3
+   4   .Строка 4
+   
+
+
+
+   ./s21_cat -s tests/empty_lines_b_s.txt
+
+   Ожидаемый результат:
+
+   1   .Строка 1
+   2   .Строка 2
+
+   3   .Строка 3
+   4   .Строка 4
+
+
+
+
+   ./s21_cat --number-nonblank --number --squeeze-blank tests/empty_lines_b_s.txt
+
+   Ожидаемый результат:
+
+   .Строка 1
+   .Строка 2
+
+   .Строка 3
+   .Строка 4
+
+   
+   
+   
+   ./s21_cat cat  --number tests/empty_lines_b_s.txt
+
+
+         1     .Строка 1
+         2     .Строка 2
+         3
+         4
+         5
+         6     .Строка 3
+         7     .Строка 4
+
+
+
+   ./s21_cat --number-nonblank tests/empty_lines_b_s.txt
+
+   
+     1     .Строка 1
+     2     .Строка 2
+
+
+
+     3     .Строка 3
+     4     .Строка 4
+
+
+
+
+2. Для файла `spec_char_ev_E_e_.txt`:
+   
+   ./s21_cat -e tests/spec_char_ev_E_e_.txt
+
+   ./s21_cat -E tests/spec_char_ev_E_e_.txt
+   
+   Ожидаемый результат:
+   
+   Hello^AWorld$
+   This is all$
+   Newline$
+   
+
+
+
+
+
+
+3. Для файла `numbered_lines_n.txt`:
+   
+   ./s21_cat -n tests/numbered_lines_n.txt
+
+   Ожидаемый результат:
+   
+        1  Этот файл содержит строки для проверки нумерации:
+        2  Первая строка
+        3
+        4  Вторая строка
+        5
+        6  Третья строк
+
+   
+   
+   
+   
+3.1  ./s21_cat -n tests/numbered_lines_n.txt tests/empty_lines_b_s.txt   -  проверка для нескольких файлов
+   
+
+Ожидаемый результат:
+
+1	Этот файл содержит строки для проверки нумерации:
+     2	Первая строка
+     3	
+     4	Вторая строка
+     5	
+     6	Третья строка   .Строка 1
+     7	   .Строка 2
+     8	
+     9	
+    10	
+    11	   .Строка 3
+    12	   .Строка 4
+
+
+
+
+
+
+
+
+
+
+
+
+4. Для файла `Tab_vt_T_t.txt`:
+   
+   ./s21_cat -t tests/Tab_vt_T_t.txt 
+   
+   Ожидаемый результат:
+   
+   Goodbye^IWorld^M
+   Example^Iof^Ia^Itab^M
+   End^Iof^Iline$^M
+
+   
+
+
+
+
+
+
+5. Для файла `test_file.txt`:
+   
+   ./s21_cat tests/Description.txt
+   
+   Ожидаемый результат:
+   
+   Это тестовый файл для утилиты cat.
+   Он содержит несколько строк текста.
+   Этот файл будет использоваться для проверки основной функциональности.
+   
+
+
+6. Для файла non_print.txt
+
+   ./s21_cat -v tests/non_print.txt
+
+   Ожидаемый результат: Вывод всех символов.
+
+
+
+7. Вывод для не существующей опции:
+
+   ./s21_cat -y tests/non_print.txt
+   
+   Ожидаемый результат:  ./s21_cat: invalid option -- 'y'
+   Допустимые опции: -b, -e, -E, -v, -n, -s, -t, -T
+
+ 
+   ./s21_cat --num tests/empty_lines_b_s.txt
+
+   Ожидаемый результат:
+
+   ./s21_cat: option '--num' is ambiguous; possibilities: '--number-nonblank' '--number'
+   Пожалуйста, используйте следующие опции: beEvnstT
+   root@WIN-VQRNG6QVD9Q:/mnt/c/Users/user/Desktop/C1 - SimpleBashUtils/MyVar/Main_Project/src/cat#
+
+
+8. Вывод ПУСТОГО ФАЙЛА:
+
+Команда:
+
+ Ожидаемый результат:
+
+ ./s21_cat  tests/clean.txt
+ <Ничего>

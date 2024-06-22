@@ -1,0 +1,7 @@
+This is a test file for grep option -iv.
+It contains lines with different cases: Test, test, TeSt, TEST.
+
+Ожидаемый результат: При использовании команды ./s21_grep -iv "test" tests/test_iv.txt ожидается выведение всех строк файла, которые НЕ содержат слово "test", игнорируя регистр.
+
+
+Это предложение не содержит ключевого слова.

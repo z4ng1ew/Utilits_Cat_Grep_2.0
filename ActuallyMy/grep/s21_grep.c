@@ -1,139 +1,130 @@
 #include "s21_grep.h"
 
-void initialize(Opt *fl, SearchSettings *ExamplSearchSettings, char **pattern) {
-  *pattern = (char *)calloc(SIZE, sizeof(char));
-  *fl = (Opt){false};
-  *ExamplSearchSettings = (SearchSettings){false, false, 0, 0};
+void initialize_and_process(int ac, char *av[], Letter_opt *CmdFlags, Retrieval_Config *GrepParams, char **pattern) {
+    *pattern = (char *)calloc(SIZE, sizeof(char));
+    *CmdFlags = (Letter_opt){false};
+    *GrepParams = (Retrieval_Config){false, false, 0, 0};
+    if (ac < 2) {
+        fprintf(stderr, "Укажите флаг\n");
+        GrepParams->has_errors = true;
+    } else {
+        analyze_cmd_arg(ac, av, CmdFlags, GrepParams, pattern);
+        if (!GrepParams->has_errors) {
+            if (!CmdFlags->f_fl && !CmdFlags->e_fl) {
+                prepare_and_add_pattern(pattern, av[optind++]);
+            }
+            if (ac - optind > 1) {
+                GrepParams->processing_a_lot_of_files = true;
+            }
+            for (int i = optind; i < ac; i++) {
+                scan_file(*CmdFlags, GrepParams, av[i], *pattern);
+            }
+        }
+    }
+    free(*pattern);
 }
 
-void check_arguments(int num_comd_line_arg, SearchSettings *ExamplSearchSettings) {
-  if (num_comd_line_arg < 2) {
-    fprintf(stderr, "Не указаны опции\n");
-    ExamplSearchSettings->bug = true;
-  }
+
+int main(int ac, char *av[]) {
+    Letter_opt CmdFlags;
+    Retrieval_Config GrepParams;
+    char *pattern;
+
+    initialize_and_process(ac, av, &CmdFlags, &GrepParams, &pattern);
+
+    if (GrepParams.has_errors) {
+        fprintf(stderr, "Распишите команду по структуре: grep [ПАРАМЕТР]… ШАБЛОНЫ [ФАЙЛ]…\n");
+    }
+
+    return GrepParams.has_errors;
 }
 
-void handle_pattern(char **array_strings_comd, Opt *fl, char **pattern) {
-  if (!fl->f && !fl->e) {
-    format_and_append_pattern(pattern, array_strings_comd[optind++]);
-  }
+
+
+void initialize_flags(Letter_opt *CmdFlags) {
+  *CmdFlags = (Letter_opt){false};
 }
 
-void process_files(int num_comd_line_arg, char **array_strings_comd, Opt fl, SearchSettings *ExamplSearchSettings, char *pattern) {
-  if (num_comd_line_arg - optind > 1) ExamplSearchSettings->many_files = true;
-
-  for (int i = optind; i < num_comd_line_arg; i++) {
-    search_in_file(fl, ExamplSearchSettings, array_strings_comd[i], pattern);
-  }
+void process_flag_e(Letter_opt *CmdFlags, char **pattern, char *optarg) {
+  CmdFlags->e_fl = true;
+  prepare_and_add_pattern(pattern, optarg);
 }
 
-int main(int num_comd_line_arg, char *array_strings_comd[]) {
-  Opt fl;
-  SearchSettings ExamplSearchSettings;
-  char *pattern;
-
-  initialize(&fl, &ExamplSearchSettings, &pattern);
-  check_arguments(num_comd_line_arg, &ExamplSearchSettings);
-
-  if (!ExamplSearchSettings.bug) {
-    verify_options(num_comd_line_arg, array_strings_comd, &fl, &ExamplSearchSettings, &pattern);
-  }
-
-  if (!ExamplSearchSettings.bug) {
-    handle_pattern(array_strings_comd, &fl, &pattern);
-    process_files(num_comd_line_arg, array_strings_comd, fl, &ExamplSearchSettings, pattern);
-  } else {
-    fprintf(stderr, "Использование: grep [ПАРАМЕТР]… ШАБЛОНЫ [ФАЙЛ]…\n");
-  }
-
-  free(pattern);
-  return ExamplSearchSettings.bug;
+void process_flag_f(Letter_opt *CmdFlags, Retrieval_Config *settings, char **pattern, char *optarg) {
+  CmdFlags->f_fl = true;
+  settings->processed_document_count++;
+  import_patterns_from_file(settings, pattern, optarg);
 }
 
-void initialize_flags(Opt *fl) {
-  *fl = (Opt){false};
-}
-
-void process_flag_e(Opt *fl, char **pattern, char *optarg) {
-  fl->e = true;
-  format_and_append_pattern(pattern, optarg);
-}
-
-void process_flag_f(Opt *fl, SearchSettings *settings, char **pattern, char *optarg) {
-  fl->f = true;
-  settings->number_of_documents++;
-  read_patterns_from_file(settings, pattern, optarg);
-}
-
-void set_flags(int option, Opt *fl, SearchSettings *settings, char **pattern) {
+void set_flags(int option, Letter_opt *CmdFlags, Retrieval_Config *settings, char **pattern) {
   switch (option) {
     case 'e':
-      process_flag_e(fl, pattern, optarg);
+      process_flag_e(CmdFlags, pattern, optarg);
       break;
     case 'i':
-      fl->i = true;
+      CmdFlags->i_fl = true;
       break;
     case 'v':
-      fl->v = true;
+      CmdFlags->v_fl = true;
       break;
     case 'c':
-      fl->c = true;
+      CmdFlags->c_fl = true;
       break;
     case 'l':
-      fl->l = true;
+      CmdFlags->l_fl = true;
       break;
     case 'n':
-      fl->n = true;
+      CmdFlags->n_fl = true;
       break;
     case 'h':
-      fl->h = true;
+      CmdFlags->h_fl = true;
       break;
     case 's':
-      fl->s = true;
+      CmdFlags->s_fl = true;
       break;
     case 'f':
-      process_flag_f(fl, settings, pattern, optarg);
+      process_flag_f(CmdFlags, settings, pattern, optarg);
       break;
     case 'o':
-      fl->o = true;
+      CmdFlags->o_fl = true;
       break;
     default:
-      settings->bug = true;
+      settings->has_errors = true;
   }
 }
 
-void finalize_flags(Opt *fl) {
-  if (fl->l) {
-    fl->c = false;
-    fl->n = false;
-    fl->o = false;
+void finalize_flags(Letter_opt *CmdFlags) {
+  if (CmdFlags->l_fl) {
+    CmdFlags->c_fl = false;
+    CmdFlags->n_fl = false;
+    CmdFlags->o_fl = false;
   }
 
-  if (fl->c) {
-    fl->n = false;
-    fl->o = false;
-  }
-}
-
-void check_for_errors(int num_comd_line_arg, char *array_strings_comd[], SearchSettings *settings) {
-  if (optind >= num_comd_line_arg || array_strings_comd[optind][0] == '-' || strlen(array_strings_comd[optind]) == 0) {
-    settings->bug = true;
+  if (CmdFlags->c_fl) {
+    CmdFlags->n_fl = false;
+    CmdFlags->o_fl = false;
   }
 }
 
-void verify_options(int num_comd_line_arg, char *array_strings_comd[], Opt *fl, SearchSettings *settings, char **pattern) {
-  initialize_flags(fl);
+void check_for_errors(int ac, char *av[], Retrieval_Config *settings) {
+  if (optind >= ac || av[optind][0] == '-' || strlen(av[optind]) == 0) {
+    settings->has_errors = true;
+  }
+}
+
+void analyze_cmd_arg(int ac, char *av[], Letter_opt *CmdFlags, Retrieval_Config *settings, char **pattern) {
+  initialize_flags(CmdFlags);
 
   int option;
-  while ((option = getopt(num_comd_line_arg, array_strings_comd, "e:ivclnhsf:o")) != -1 && !(settings->bug)) {
-    set_flags(option, fl, settings, pattern);
+  while ((option = getopt(ac, av, "e:ivclnhsf:o")) != -1 && !(settings->has_errors)) {
+    set_flags(option, CmdFlags, settings, pattern);
   }
 
-  finalize_flags(fl);
-  check_for_errors(num_comd_line_arg, array_strings_comd, settings);
+  finalize_flags(CmdFlags);
+  check_for_errors(ac, av, settings);
 }
 
-void read_patterns_from_file(SearchSettings *ExamplSearchSettings, char **pattern, char *optarg) {
+void import_patterns_from_file(Retrieval_Config *GrepParams, char **pattern, char *optarg) {
   FILE *file = fopen(optarg, "r");
 
   if (file != NULL) {
@@ -141,18 +132,18 @@ void read_patterns_from_file(SearchSettings *ExamplSearchSettings, char **patter
     size_t length = 0;
 
     while ((getline(&line, &length, file)) != -1) {
-      format_and_append_pattern(pattern, line);
+      prepare_and_add_pattern(pattern, line);
     }
 
     free(line);
     fclose(file);
   } else {
-    ExamplSearchSettings->bug = true;
-    fprintf(stderr, "s21_grep: %s: Нет такого файла или каталога\n", optarg);
+    GrepParams->has_errors = true;
+    fprintf(stderr, "s21_grep: %s: Такого файла или каталога не существует\n", optarg);
   }
 }
 
-void format_and_append_pattern(char **pattern, char *line) {
+void prepare_and_add_pattern(char **pattern, char *line) {
   char *copy_line = malloc(strlen(line) + 10);
   strcpy(copy_line, line);
 
@@ -160,7 +151,7 @@ void format_and_append_pattern(char **pattern, char *line) {
     strcpy(copy_line, "$");
   }
 
-  delete_newline_character(&copy_line);
+  remove_trailing_newline(&copy_line);
 
   static size_t buffer = SIZE;
   while (strlen(*pattern) + strlen(line) + 10 > buffer) {
@@ -173,42 +164,42 @@ void format_and_append_pattern(char **pattern, char *line) {
   free(copy_line);
 }
 
-void delete_newline_character(char **line) {
+void remove_trailing_newline(char **line) {
   int last_index = (int)strlen(*line) - 1;
   if ((*line)[last_index] == '\n') (*line)[last_index] = '\0';
 }
 
-void search_in_file(Opt fl, SearchSettings *ExamplSearchSettings, const char *filename, char *pattern) {
+void scan_file(Letter_opt CmdFlags, Retrieval_Config *GrepParams, const char *filename, char *pattern) {
   FILE *file = fopen(filename, "r");
 
   if (file != NULL) {
     regex_t regex;
 
-    regex_compile(fl, ExamplSearchSettings, &regex, pattern);
+    validate_and_compile_regex(CmdFlags, GrepParams, &regex, pattern);
 
-    if (!ExamplSearchSettings->bug && !(fl.o && fl.v)) {
-      if (fl.o) {
-        process_flag_o(fl, ExamplSearchSettings, file, &regex, filename);
+    if (!GrepParams->has_errors && !(CmdFlags.o_fl && CmdFlags.v_fl)) {
+      if (CmdFlags.o_fl) {
+        handle_opt_o(CmdFlags, GrepParams, file, &regex, filename);
       } else {
-        process_file_lines(fl, ExamplSearchSettings, file, &regex, filename);
+        handle_matching_regex(CmdFlags, GrepParams, file, &regex, filename);
       }
     }
 
     regfree(&regex);
     fclose(file);
-  } else if (!fl.s) {
-    fprintf(stderr, "s21_grep: %s: Нет такого файла или каталога\n", filename);
+  } else if (!CmdFlags.s_fl) {
+    fprintf(stderr, "s21_grep: %s: Такого файла или каталога не существует\n", filename);
   }
 }
 
-void regex_compile(Opt fl, SearchSettings *ExamplSearchSettings, regex_t *regex, char *pattern) {
-  if (regcomp(regex, pattern, fl.i ? REG_ICASE : 0)) {
-    ExamplSearchSettings->bug = true;
-    fprintf(stderr, "Error compiling regex\n");
+void validate_and_compile_regex(Letter_opt CmdFlags, Retrieval_Config *GrepParams, regex_t *regex, char *pattern) {
+  if (regcomp(regex, pattern, CmdFlags.i_fl ? REG_ICASE : 0)) {
+    GrepParams->has_errors = true;
+    fprintf(stderr, "Ошибка при компиляции -- regex\n");
   }
 }
 
-void process_flag_o(Opt fl, SearchSettings *ExamplSearchSettings, FILE *file, regex_t *regex, const char *filename) {
+void handle_opt_o(Letter_opt CmdFlags, Retrieval_Config *GrepParams, FILE *file, regex_t *regex, const char *filename) {
   regmatch_t match;
   char *line = NULL;
   size_t length = 0;
@@ -217,7 +208,7 @@ void process_flag_o(Opt fl, SearchSettings *ExamplSearchSettings, FILE *file, re
   while ((getline(&line, &length, file)) != -1) {
     line_count++;
 
-    delete_newline_character(&line);
+    remove_trailing_newline(&line);
 
     char *copy_line = strdup(line);
     char *original_copy_line = copy_line;
@@ -228,8 +219,8 @@ void process_flag_o(Opt fl, SearchSettings *ExamplSearchSettings, FILE *file, re
         continue;
       }
 
-      if (ExamplSearchSettings->many_files && !fl.h) printf("%s:", filename);
-      if (fl.n) printf("%d:", line_count);
+      if (GrepParams->processing_a_lot_of_files && !CmdFlags.h_fl) printf("%s:", filename);
+      if (CmdFlags.n_fl) printf("%d:", line_count);
       printf("%.*s\n", (int)match.rm_eo - (int)match.rm_so, copy_line + match.rm_so);
 
       copy_line += match.rm_eo;
@@ -243,7 +234,7 @@ void process_flag_o(Opt fl, SearchSettings *ExamplSearchSettings, FILE *file, re
   line = NULL;
 }
 
-void process_file_lines(Opt fl, SearchSettings *ExamplSearchSettings, FILE *file, regex_t *regex, const char *filename) {
+void handle_matching_regex(Letter_opt CmdFlags, Retrieval_Config *GrepParams, FILE *file, regex_t *regex, const char *filename) {
   char *line = NULL;
   size_t length = 0;
   int line_count = 0, match_count = 0;
@@ -251,28 +242,28 @@ void process_file_lines(Opt fl, SearchSettings *ExamplSearchSettings, FILE *file
   while ((getline(&line, &length, file)) != -1) {
     line_count++;
 
-    delete_newline_character(&line);
+    remove_trailing_newline(&line);
 
     int status = regexec(regex, line, 0, NULL, 0);
 
-    if (!status ^ fl.v) {
-      if (fl.l) {
+    if (!status ^ CmdFlags.v_fl) {
+      if (CmdFlags.l_fl) {
         printf("%s\n", filename);
         break;
       }
 
       match_count++;
 
-      if (!fl.c) {
-        if (ExamplSearchSettings->many_files && !fl.h) printf("%s:", filename);
-        if (fl.n) printf("%d:", line_count);
+      if (!CmdFlags.c_fl) {
+        if (GrepParams->processing_a_lot_of_files && !CmdFlags.h_fl) printf("%s:", filename);
+        if (CmdFlags.n_fl) printf("%d:", line_count);
         printf("%s\n", line);
       }
     }
   }
 
-  if (fl.c) {
-    if (ExamplSearchSettings->many_files && !fl.h) printf("%s:", filename);
+  if (CmdFlags.c_fl) {
+    if (GrepParams->processing_a_lot_of_files && !CmdFlags.h_fl) printf("%s:", filename);
     printf("%d\n", match_count);
   }
 

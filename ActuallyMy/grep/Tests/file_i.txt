@@ -1,4 +1,0 @@
-This is a Test file.
-This line contains the Pattern.
-Another line without it.
-PATTERN

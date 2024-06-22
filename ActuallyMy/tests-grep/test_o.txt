@@ -1,0 +1,6 @@
+This is a test file for grep option -o.
+It contains lines with words like testword and numbers like 123456.
+
+Команда: ./s21_grep -o "t[a-z]*" tests/test_o.txt
+
+Ожидаемый результат: При использовании команды ожидается вывод всех совпавших частей строк файла test_o.txt, то есть всех слов.

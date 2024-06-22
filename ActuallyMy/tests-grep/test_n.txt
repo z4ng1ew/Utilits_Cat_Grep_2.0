@@ -1,0 +1,4 @@
+This is a test file for grep option -n.
+It contains multiple lines with the word "test" in them.
+
+Ожидаемый результат: При использовании команды ./s21_grep -n "test" tests/test_n.txt ожидается выведение строк файла с номерами строк, содержащих слово "test".

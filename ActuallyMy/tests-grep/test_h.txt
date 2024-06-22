@@ -1,0 +1,6 @@
+This is a test file for grep option -h.
+It contains lines with and without the word "test".
+
+
+Команда: ./s21_grep -h "test" tests/test_h.txt
+Ожидаемый результат: Вывод только строк из файла, содержащих слово "test", без указания имени файла.

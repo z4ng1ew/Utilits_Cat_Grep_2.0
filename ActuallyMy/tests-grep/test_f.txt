@@ -1,0 +1,7 @@
+This is a test file for grep option -f.
+It contains lines with and without numbers like 123 and words like testword.
+Another line without relevant matches.
+
+Команда: ./s21_grep -f tests/regexes.txt tests/test_f.txt
+
+Ожидаемый результат: При использовании команды ожидается вывод всех строк файла test_f.txt, которые содержат совпадения с регулярными выражениями, взятыми из файла regexes.txt. В данном случае ожидается выведение строк, содержащих слово "testword" и числа.

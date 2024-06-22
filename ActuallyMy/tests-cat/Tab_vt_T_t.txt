@@ -1,0 +1,3 @@
+Goodbye	World
+Example	of	a	tab
+End	of	line$

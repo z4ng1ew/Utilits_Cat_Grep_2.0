@@ -1,0 +1,7 @@
+This is a test file for grep option -s.
+It contains lines with and without the word "test".
+
+
+Команда: ./s21_grep -s "test" non_existing_file.txt tests/test_s.txt
+
+Ожидаемый результат: При использовании команды ошибка о несуществующем файле non_existing_file.txt не должна выводиться, и программа должна выполнить поиск только в файле test_s.txt, выводя соответствующие строки.

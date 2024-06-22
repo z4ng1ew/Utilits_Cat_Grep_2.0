@@ -1,4 +1,3 @@
-
 #include <getopt.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -6,24 +5,27 @@
 
 
 typedef struct {
-    bool b;
-    bool e;
-    bool n;
-    bool s;
-    bool t;
-    bool v;
-} Opt;
+    bool fl_b;
+    bool fl_e;
+    bool fl_n;
+    bool fl_s;
+    bool fl_t;
+    bool fl_v;
+} Struct_singl_lett_opt;
 
 
 const struct option long_options[] = {
-    {"number-nonblank", 0, 0, 'b'},
-    {"number", 0, 0, 'n'},
-    {"squeeze-blank", 0, 0, 's'},
-    {0, 0, 0, 0}};
+    {"number-nonblank", no_argument, NULL, 'b'},
+    {"number", no_argument, NULL, 'n'},
+    {"squeeze-blank", no_argument, NULL, 's'},  
+    {NULL, 0, NULL, 0}  
+};
 
 
 
-void open_and_read_file(Opt short_opt, const char* filename);
-void display_file_with_flags(FILE* file, const Opt short_opt);
-bool verify_options(int num_comd_line_arg, char* array_strings_comd[], Opt* short_opt); // - вот содержимое s21_cat.h
+void handle_file(Struct_singl_lett_opt single_letter_opt, const char* filename);
+void print_file_with_options(FILE* file, const Struct_singl_lett_opt single_letter_opt);
+bool check_options(int num_args, char* av[], Struct_singl_lett_opt* single_letter_opt); 
+
+
 
