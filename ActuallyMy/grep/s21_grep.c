@@ -1,5 +1,19 @@
 #include "s21_grep.h"
 
+int main(int ac, char *av[]) {
+    Letter_opt CmdFlags;
+    Retrieval_Config GrepParams;
+    char *pattern;
+
+    initialize_and_process(ac, av, &CmdFlags, &GrepParams, &pattern);
+
+    if (GrepParams.has_errors) {
+        fprintf(stderr, "Распишите команду по структуре: grep [ПАРАМЕТР]… ШАБЛОНЫ [ФАЙЛ]…\n");
+    }
+
+    return GrepParams.has_errors;
+}
+
 void initialize_and_process(int ac, char *av[], Letter_opt *CmdFlags, Retrieval_Config *GrepParams, char **pattern) {
     *pattern = (char *)calloc(SIZE, sizeof(char));
     *CmdFlags = (Letter_opt){false};
@@ -23,22 +37,6 @@ void initialize_and_process(int ac, char *av[], Letter_opt *CmdFlags, Retrieval_
     }
     free(*pattern);
 }
-
-
-int main(int ac, char *av[]) {
-    Letter_opt CmdFlags;
-    Retrieval_Config GrepParams;
-    char *pattern;
-
-    initialize_and_process(ac, av, &CmdFlags, &GrepParams, &pattern);
-
-    if (GrepParams.has_errors) {
-        fprintf(stderr, "Распишите команду по структуре: grep [ПАРАМЕТР]… ШАБЛОНЫ [ФАЙЛ]…\n");
-    }
-
-    return GrepParams.has_errors;
-}
-
 
 
 void initialize_flags(Letter_opt *CmdFlags) {

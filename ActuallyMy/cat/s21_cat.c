@@ -1,16 +1,12 @@
 #include "s21_cat.h"
-
-void process_files(int num_args, char* av[], Struct_singl_lett_opt single_letter_opt) {
-    for (int i = optind; i < num_args; i++) {
-        handle_file(single_letter_opt, av[i]);
-    }
-}
-
+ 
 int main(int num_args, char* av[]) {
     Struct_singl_lett_opt single_letter_opt = {false};
     bool valid_flag = check_options(num_args, av, &single_letter_opt);
     if (valid_flag) {
-        process_files(num_args, av, single_letter_opt);
+        for (int i = optind; i < num_args; i++) {
+            handle_file(single_letter_opt, av[i]);
+        }
     }
     return !valid_flag;
 }

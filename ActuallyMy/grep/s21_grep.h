@@ -28,6 +28,7 @@ typedef struct {
   int processed_document_count;
 } Retrieval_Config;
 
+void initialize_and_process(int ac, char *av[], Letter_opt *CmdFlags, Retrieval_Config *GrepParams, char **pattern);
 void analyze_cmd_arg(int ac, char *av[], Letter_opt *CmdFlags, Retrieval_Config *params, char **pattern);
 void import_patterns_from_file(Retrieval_Config *params, char **pattern, char *optarg);
 void prepare_and_add_pattern(char **pattern, char *line);
