@@ -1,6 +1,6 @@
 #!/bin/bash
 
-falshivka="./s21_grep"
+MyUtilit="./s21_grep"
 original="grep"
 
 file_name='TEST-FILE'
@@ -83,7 +83,7 @@ file_comparison() {
 
 for index in "${!suite_flag[@]}"; do
     echo -n "Номер теста [$(($index + 1)) из ${#suite_flag[@]}] - ${suite_flag[$index]} - "
-    eval "$falshivka ${suite_flag[$index]} > ${file_name}-0${file_format}"
+    eval "$MyUtilit ${suite_flag[$index]} > ${file_name}-0${file_format}"
     eval "$original ${suite_flag[$index]} > ${file_name}-1${file_format}"
     file_comparison "${file_name}-0${file_format}" "${file_name}-1${file_format}"
 done

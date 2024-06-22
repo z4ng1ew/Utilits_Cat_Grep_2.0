@@ -9,7 +9,7 @@ s21_cat:
 
 
 test:
-	./cat_check.sh
+	./cat_chech.sh
 
 rebuild: clean s21_cat
 
